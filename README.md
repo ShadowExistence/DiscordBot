@@ -1,2 +1,2 @@
-# Js
+# JavaScriptLearning
 Learning js na discordBot
