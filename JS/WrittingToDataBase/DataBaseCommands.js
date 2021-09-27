@@ -28,12 +28,6 @@ function IndexOfID(ID){
 
 
 
-CreateNewProfile('ShadowExistence', '1232131', () =>{
-    return [
-        new StringObject('kills', 'int'),
-        new StringObject('deads', 'int')
-    ]
-});
 
 /**
  * @typedef StringObject
@@ -63,6 +57,7 @@ function CreateNewProfile(nickName, id, moreArgs) {
         })
 
         fs.writeFileSync(file, JSON.stringify(jsonData), err => {if (err) throw err;})
+        console.log("Succesfly added new profile!");
         return
     }
     else{
@@ -87,53 +82,75 @@ function CreateNewProfile(nickName, id, moreArgs) {
  */
 
 function DataEditior(varName, varValue, flag = 'add', id = 0){
-    var jsonData = JSON.parse(fs.readFileSync(file));
-    var dataArray = jsonData.profiles;
+  
 
-    //Adding Variable To All objects => flag = add
-    //Has build-in checking if the varName already exists
+  //Adding Variable To All objects => flag = add
+  //Has build-in checking if the varName already exists
 
-    if (flag == 'add'){
-        if(id == 0){
-            for(let i = 0; i < dataArray.length; i++){
-                let propArray = Object.getOwnPropertyNames(dataArray[i])
-        
-                if(!propArray.includes(varName)){
-                    dataArray[i][`${varName}`] = varValue;
-                    console.log(`Added '${varName}': ${varValue} to ${dataArray[i].ID}:${dataArray[i].nickname}`)
-                }
-            }
-            console.log("Every other object already has this variable");
-            fs.writeFileSync(file, JSON.stringify(jsonData), err => {if (err) throw err;})
-            return
-        }
-        else{
-            if(IndexOfID(id) != -1){
-
-                let propArray = Object.getOwnPropertyNames(dataArray[x])
-                if(!propArray.includes(varName)){
-                    dataArray[x][varName] = varValue;
-                    console.log(`Added '${varName}': ${varValue} to ${dataArray[x].ID}:${dataArray[x].nickname}`);
-                }
-                else{
-                    console.log(`\nThis variable already exists!`);
-                    console.log(`if you wish to change it use 'flag' = 'edit'\n`);
-                    return
-                }
-            }
-        } 
+  if (flag == 'add'){
+    if(id == 0){
+      DataAdd(varName, varValue);
     }
-    if (flag == 'remove'){
-        if(id == 0){
-
-            //Need to implement remove flag
-
-
-        }
+    else{
+      DataAddWithID(varName, varValue, id)
+      }
     }
+
+  if (flag == 'remove'){
+    if(id == 0){
+
+      //Need to implement remove flag
+    }
+  }
+}
+
+function DataAdd(varName, varValue){
+  var jsonData = JSON.parse(fs.readFileSync(file));
+  var dataArray = jsonData.profiles;
+  for(let i = 0; i < dataArray.length; i++){
+    let propArray = Object.getOwnPropertyNames(dataArray[i])
+
+    if(!propArray.includes(varName)){
+        dataArray[i][`${varName}`] = varValue;
+        console.log(`Added '${varName}': ${varValue} to ${dataArray[i].ID}:${dataArray[i].nickname}`)
+    }
+  }
+  console.log("Every other object already has this variable");
+  fs.writeFileSync(file, JSON.stringify(jsonData), err => {if (err) throw err;})
+}
+
+function DataAddWithID(varName, varValue, id){
+  var jsonData = JSON.parse(fs.readFileSync(file));
+  var dataArray = jsonData.profiles;
+  let x = IndexOfID(id);
+  let propArray = Object.getOwnPropertyNames(dataArray[x])
+  if(!propArray.includes(varName)){
+    dataArray[x][varName] = varValue;
+    console.log(`Added '${varName}': ${varValue} to ${dataArray[x].ID}:${dataArray[x].nickname}`);
+  }
+  else{
+    console.log(`\nThis variable already exists!`);
+    console.log(`if you wish to change it use 'flag' = 'edit'\n`);
+    return
+  }
 }
 
 
 
+//TESTY
 
+//Creating profile
+
+// CreateNewProfile('ShadowExistence', '1232131', () =>{
+//   return [
+//       new StringObject('kills', 'int'),
+//       new StringObject('deads', 'int')
+//   ]
+// });
+
+//Adding new variable to all objects
+//DataEditior('ratio', 0, 'add');
+
+//Adding new var to specific id
+//DataEditior('ratio', 0, 'add','1232131');
 
