@@ -1,75 +1,69 @@
-const { BADNAME } = require('dns');
+
 const fs = require('fs');
-const { type } = require('os');
 
 module.exports = class DataEditor{
 
-   constructor(){
-
+    path = "";
+   constructor(path = ""){
+    this.path = path
    }
 
-    IndexOfID(dataArray, id){
-
-        var dataArray = jsonData.profiles;
-    
-        for(let i = 0; i < jsonData.profiles.length; i++){
-            if(dataArray[i].id.includes(id)){
+    IndexOfID(dataArray, ID){
+        let output = false;
+        for(let i = 0; i < dataArray.length; i++){
+            if(dataArray[i].ID.includes(ID)){
+                console.log(i);
                 return i
             }
         }
-        return -1;
-    } // Need to finish this!!!!!
+        console.log(output);
+        return output;
+    }
 
     
     
-            
+    Path(){
+        return this.path;
+    }
 
 
     /**
      * @param {string} dbName 
-     * @param {string} path 
      */
     
-    CreateDB(dbName, path = 'DataBase') {
-        const arrayCreate = `{"${dbName}":[]}`
-        const x = this.LookingForDb(dbName);
-        console.log(x);
-        if(x == 2){
-            
-            fs.writeFileSync(`./${path}/${dbName}.json`, arrayCreate,function (err) {
-                if (err) {throw err;}
-            });
-            console.log("DataBase created");
-            return 
-        }
-        console.log(x);
-        console.log("Database with this name already exists");
+    CreateDB(dbName) {
+        const arrayCreate = `{"profiles":[]}`
         
+        fs.writeFileSync(`${this.path}/${dbName}.json`, arrayCreate, (err) => {
+            if (err) {throw err;}
+        });
+        console.log("DataBase created");
+        return 
+
     };
     
     /**
      * 
      * @param {string} dbName 
-     * @param {string} path 
      * @returns {string | number} - path to DB or error
      */
-    LookingForDb(dbName, path = './DataBase/'){
-        var x = "";
-        fs.readdir(path,(err,files) => {
-            files.forEach(Element =>{
-                console.log(Element + " " + dbName);
-                if(Element === `${dbName}.json`){
+    LookingForDb(dbName){
+        var foundDB = false;
+        fs.readdir(this.path, (err, files) => {
+            files.forEach(Element => {
+                console.log(Element + " " + dbName + '.json');
+                if (Element === `${dbName}.json`) {
                     console.log("found db with the same name");
-                    console.log('first return')
-                    x = `./${path}/${dbName}.json`
+                    foundDB = true;
                     return;
                 }
-            })
-            console.log('after return;')
-            return x;
+            });
         })
-        
-        console.log('after 2ndreturn;')
+        console.log(foundDB)
+        if(foundDB){
+            console.log(`${this.path}/${dbName}.json`)
+            return `${this.path}/${dbName}.json`
+        }
         return 2;
     }
 
@@ -82,27 +76,30 @@ module.exports = class DataEditor{
      * @returns 
      */
     CreateProfile(dbName, nickName, id, moreArgs){
-        const pathToDB = this.LookingForDb(dbName);
+        //const pathToDB = this.LookingForDb(dbName);  Need to fix method for this!
+        // Further work without checking if db exists!
 
-        if(pathToDB == -2){
-            return -2;
-        }
+        let DBpath = `${this.path}/${dbName}.json`;
 
-        var jsonData = JSON.parse(fs.readFileSync(pathToDB));
+        let jsonData = JSON.parse(fs.readFileSync(DBpath));
+
         var dataArray = jsonData.profiles;
-        if(this.IndexOfID(dataArray, id) == -1){
-            
 
+        if(this.IndexOfID(dataArray, id) == false){
+            
             let newProfile = {ID: id, nickname: nickName};
             dataArray.push(newProfile)
-            moreArgs().forEach((Element) =>{
+            if(moreArgs){
+                moreArgs().forEach((Element) =>{
     
-                if(Element.dataType === 'string'){newProfile[Element.varName] = ""}
-                if(Element.dataType === 'int'){newProfile[Element.varName] = 0}
-                if(Element.dataType === 'bool'){newProfile[Element.varName] = false}
-            })
+                    if(Element.dataType === 'string'){newProfile[Element.varName] = ""}
+                    if(Element.dataType === 'int'){newProfile[Element.varName] = 0}
+                    if(Element.dataType === 'bool'){newProfile[Element.varName] = false}
+                })
+            }
+            
     
-            fs.writeFileSync(pathToDB, JSON.stringify(jsonData), err => {if (err) throw err;})
+            fs.writeFileSync(`${this.path}/${dbName}.json`, JSON.stringify(jsonData), err => {if (err) throw err;})
             console.log("Succesfly added new profile!");
             return
         }
@@ -111,4 +108,22 @@ module.exports = class DataEditor{
             return
         }
     }
+
+    RemoveProfile(dbName, id){
+
+        let DBpath = `${this.path}/${dbName}.json`;
+        let jsonData = JSON.parse(fs.readFileSync(DBpath));
+        var dataArray = jsonData.profiles;
+        let x = this.IndexOfID(dataArray, id);
+        if( typeof(x) == typeof(1)){
+            dataArray.splice(x,1);
+            console.log(dataArray);
+            fs.writeFile(DBpath, JSON.stringify(jsonData), err => {if (err) throw err;})
+            return;
+        }
+        else{
+            console.log('Cant find this id');
+        }
+    }
 }
+
