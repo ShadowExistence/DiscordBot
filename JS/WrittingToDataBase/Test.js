@@ -6,8 +6,8 @@ const test = new DataEditor('./DataBase');
 
 //test.CreateDB('Test');
 
-//test.CreateProfile('Test', 'ShadowExistence', '12332');
+test.CreateProfile('Test.json', 'ShadowExistence', '444');
 
-//test.RemoveProfile('Test', '3333');
+// test.RemoveProfile('Test', '444');
 
 
