@@ -1,10 +1,10 @@
-const fs = require('fs');
+import fs from 'fs'
 
 /**
  * @param {string} nickName
  */
 
-module.exports = function NameControl(dbName, nickName) {
+export function NameControl(dbName, nickName) {
     let nameLenght = false;
     let nameExists = false;
 

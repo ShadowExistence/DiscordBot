@@ -1,6 +1,7 @@
-const fs = require('fs');
+import fs from 'fs'
+import mariaDB from 'mariadb'
 
-module.exports = class DataEditor{
+export  class DataEditor{
 
     constructor(){
         this.path = './DataBase'

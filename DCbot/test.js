@@ -1,17 +1,8 @@
-const fs = require('fs');
-const DataEditor = require('./src/DataEditor.js');
+import fs from 'fs-extra'
+import {DataEditor} from './src/DataEditor.mjs'
 
 const editor = new DataEditor();
 
-
-
-let test = {
-    name: 'Kkk',
-    age: 12
-}
-
-let array = []
-test.ss = 'sd'
 
 
 function lookingForName(dbName, nickName) {
@@ -64,20 +55,14 @@ function AddVar(dbName, varName, value, ID = 0){
     return true;
 }
 
-function LookingForDb(dbName){
-    
+async function LookingForDb(dbName){
     let found = false;
-    fs.readdir(`./DataBase`,(err, files) => {
-        if(err){console.log(err); return false}
-        console.log(files.length)
-        
-        for(let i = 0; files.length; i++){
-            
-            if(files[i] == dbName){
-                console.log('found file with the same name');
-                found = true;
-                return;
-            }
+    
+    await fs.pathExists(`./DataBase/${dbName}`, (err,exists) =>{
+        if(err) throw err;
+        if(exists){
+            console.log("found db")
+            found = true;
         }
     })
 
