@@ -10,7 +10,6 @@ module.exports =  async function (msg, args) {
   if(msg.author == memberToKick.user || memberToKick.user.bot) {msg.reply(`Why would you even try it?`); return;}
   if(!memberToKick.kickable) {msg.reply('Permissions Error: Member can not be kicked'); return;}
 
-
   for(let i = 2; i < args.length; i++){
     args[1] += ` ${args[i]}`
   }

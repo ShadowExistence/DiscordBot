@@ -9,7 +9,7 @@ module.exports =  async function (msg, args) {
   const memberToBan = msg.mentions.members.first()
   if(msg.author == memberToBan.user || memberToBan.user.bot) {msg.reply(`Why would you even try it?`); return;}
   if(!memberToBan.bannable) {msg.reply('Permissions Error: Member can not be banned'); return;}
-
+  
   for(let i = 3; i < args.length; i++){
     args[2] += ` ${args[i]}`
   }

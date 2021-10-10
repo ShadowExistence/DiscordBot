@@ -10,18 +10,17 @@ const ms = require('ms')
 module.exports = async function (msg, args) {
     
     if (msg.channel.type === 'DM') return;
-    if(args[0] > 99) {msg.reply('You can purge max. 100 messages!'); return;}
-    const msgs = await msg.channel.messages.fetch({limit: (parseInt(args[0]) + 1)});
+    if(args[0] > 100) {msg.reply('You can purge max. 100 messages!'); return;}
+    const msgs = await msg.channel.messages.fetch({limit: (parseInt(args[0]))});
     
-    const deletable = await msgs.filter(async (msg) => (msg.createdTimestamp - Date.now()) < ms('14d') && !msg.pinned);
-    
+    const deletable = msgs.filter(async (msg) => (msg.createdTimestamp - Date.now()) < ms('14d') && !msg.pinned);
+
+    await msg.delete();
     try{
-        await msg.delete();
         await msg.channel.bulkDelete(deletable)
     }
     catch(e){
         return
     }
-    
     return
 }

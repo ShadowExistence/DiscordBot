@@ -1,5 +1,6 @@
 const dc = require('discord.js')
 const fs = require('fs')
+
 const commandHandler = require('./src/commands')
 const adminCommands = require('./src/adminCommands')
 
@@ -13,8 +14,6 @@ const bot = new dc.Client({
         dc.Intents.FLAGS.DIRECT_MESSAGES
     ]
 });
-
-
 
 
 bot.on('ready', () => {
@@ -36,10 +35,8 @@ fs.readFile('./token.txt', (err,data) => {
 
 // TODO
     
-    //  add role >> add roles to the user profiles
-    //  remove role
     //  type with embed
     //  create vc when joned specific channel
     //  Send notify about new yt video
-    //  Voting 
+    //  Voting > Specific channel
     //  chaning name with score > ranked another file ** Connection with db
