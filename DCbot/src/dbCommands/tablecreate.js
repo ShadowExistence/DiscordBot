@@ -10,7 +10,8 @@ const url = `mongodb://localhost:27017`;
 module.exports = async function (msg, args){
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        let dbo = db.db(msg.guild.name.replace(' ', '')); //Guild name here
+        let dbo = db.db(msg.guild.name.replace(' ', ''));
+        
         dbo.createCollection(args[0], (err) => {if(err) throw err;});
         dbo.createIndex(args[0], {id: 1}, {unique: true}, (err) =>{
             if (err) throw err;
