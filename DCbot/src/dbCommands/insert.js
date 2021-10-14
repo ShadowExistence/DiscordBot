@@ -5,29 +5,40 @@ const dc = require('discord.js')
 
 
 
+
 /**
  * @typedef {string | keyVal[]}  argsStrings
  */
 
 /**
- * 
  * @param {dc.Message} msg 
+ * @param {string[]} args
  * @param {argsStrings} object 
  */
-module.exports = async function name(msg, args) {
-    MongoClient.connect(url, function(err, db) {
-        if (err) throw err;
-        let dbo = db.db(msg.guild.name.replace(' ', ''));
-        let obj = {kill: 0}
-        // for(let i = 1; i < args.lenght; i += 2){
-            
-        // }
-        console.log(obj)
-        dbo.collection(args[0]).insertOne(obj & {id:1}, function(err, res) { /// NEED  TO FIX THIS M8
-          if (err) throw err;
-          console.log("Noice, you inserted it");
-          db.close();
-        });
-    });
+module.exports = async function insert(msg, args) {
+
+  if(args.length >= 3){
+    msg.reply('To many arguments, you can give max. 2!');
+    return
+  }
+  const guildName = msg.guild.name.replace(' ', '')
+  const client = new MongoClient(url);
+  await client.connect();
+
+  const database = client.db(guildName);
+  const table = database.collection(args[0])
+  const lastId = await table.countDocuments({});
+
+  let obj = {id:lastId, [args[0]]: args[1]};
+  
+  table.insertOne(obj).then(response => { client.close()})
+  .catch(err => {throw err})
+  
+  await msg.reply(`Inserted data to ${args[0]}`)
+  return;
 }
+
+// Posible problem with datatypes
+
+
 
