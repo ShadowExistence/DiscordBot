@@ -47,12 +47,7 @@ module.exports =  async function (msg) {
     if(msg.content.match('test')){
         commands[command](msg, args)
     }
-    if(msg.content.match('ctable')){
-        commands[command](msg, args)
-    }
-    if(msg.content.match('insert')){
-        commands[command](msg, args)
-    }
+    
 }
 
 async function PermCheck(msg, perm) {
