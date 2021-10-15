@@ -5,15 +5,9 @@ const dc = require('discord.js')
 
 
 
-
-/**
- * @typedef {string | keyVal[]}  argsStrings
- */
-
 /**
  * @param {dc.Message} msg 
  * @param {string[]} args
- * @param {argsStrings} object 
  */
 module.exports = async function insert(msg, args) {
 
@@ -24,7 +18,6 @@ module.exports = async function insert(msg, args) {
   const guildName = msg.guild.name.replace(' ', '')
   const client = new MongoClient(url);
   await client.connect();
-
   const database = client.db(guildName);
   const table = database.collection(args[0])
   const lastId = await table.countDocuments({});
