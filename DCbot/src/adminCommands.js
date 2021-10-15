@@ -20,10 +20,10 @@ const commands = {
 }
 
 module.exports =  async function (msg) {
-    if(!msgCheck(msg)) return;
+    //if(!msgCheck(msg)) return;
+    console.log('into admin')
 
     if(!PermCheck(msg,'ADMINISTRATOR')) {msg.reply('Permissions Error'); return;}
-    // if(BotPermCheck(msg))
     let args = msg.content.split(' ');
     args = args.filter(Boolean); 
     let command = args.shift(); 
@@ -55,14 +55,6 @@ async function PermCheck(msg, perm) {
     
     if(member.permissions.has(perm)) return true;
     return false    
-}
-
-function msgCheck(msg){
-
-    if(msg.author.bot) return false;
-    if(msg.channel.type == 'DM') return false;
-    if(!msg.content.startsWith('!')) return false;
-    return true;
 }
 
 /**

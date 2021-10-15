@@ -2,8 +2,7 @@ const dc = require('discord.js')
 const fs = require('fs')
 
 const commandHandler = require('./src/commands')
-const adminCommands = require('./src/adminCommands');
-const DBCommands = require('./src/DBCommands');
+
 
 
 const bot = new dc.Client({
@@ -25,13 +24,6 @@ bot.on('ready', () => {
 //CommonCommands
 bot.on('messageCreate', commandHandler);
     
-//AdminCommands
-bot.on('messageCreate', adminCommands)
-
-//DataBaseCommands
-bot.on('messageCreate', DBCommands)
-
-
 fs.readFile('./token.txt', (err,data) => {
     bot.login(data.toString());
 });

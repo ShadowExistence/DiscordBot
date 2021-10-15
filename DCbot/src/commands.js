@@ -2,10 +2,9 @@ const dc = require('discord.js')
 
 
 const ping = require('./Commands/ping.js')
+const adminCommands = require('./adminCommands');
+const DBCommands = require('./DBCommands');
 
-const commands = {
-    ping: ping,
-}
 
 
 
@@ -13,17 +12,30 @@ const commands = {
  * @param {dc.Message} msg 
  */
 module.exports =  async function (msg) {
-    
-    if(!msgCheck(msg)) return;
-    let args = msg.content.split(' ');
-    args = args.filter(Boolean); 
-    let command = args.shift(); 
-    command = command.substring(1);
-    
+        
+    try{
 
-    if(msg.content.match('ping')){
-        commands[command](msg, args)
+        msgCheck(msg)
+        if(msg.content.startsWith('.')){
+            DBCommands(msg)
+            
+        }
+        if(msg.content.startsWith('=')){
+            adminCommands(msg)
+        }
+
+
+
+
+
+
     }
+    catch(e){
+        console.log(`>${msg.guild.name} - Error`);
+        console.log(e);
+    }
+    
+    
 
     
 }
@@ -32,7 +44,7 @@ function msgCheck(msg){
 
     if(msg.author.bot) return false;
     if(msg.channel.type == 'DM') return false;
-    if(!msg.content.startsWith('!')) return false;
+    if(!msg.content.startsWith('=') && !msg.content.startsWith('.')) {console.log('Failed check');return false;}
     return true;
 }
 
