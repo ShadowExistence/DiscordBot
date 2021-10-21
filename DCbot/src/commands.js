@@ -1,10 +1,8 @@
 const dc = require('discord.js')
 
-
-const ping = require('./Commands/ping.js')
 const adminCommands = require('./adminCommands');
 const DBCommands = require('./DBCommands');
-
+const rankedCommands = require('./RankedComands/rankedCommandsHandler')
 
 
 
@@ -13,47 +11,28 @@ const DBCommands = require('./DBCommands');
  */
 module.exports =  async function (msg) {
         
-    try{
-
-        msgCheck(msg)
-        if(msg.content.startsWith('.')){
-            DBCommands(msg)
-            
-        }
-        if(msg.content.startsWith('=')){
-            adminCommands(msg)
-        }
-
-
-
-
-
-
+    msgCheck(msg)
+    if(msg.content.startsWith('.')){
+        DBCommands(msg)
+        
     }
-    catch(e){
-        console.log(`>${msg.guild.name} - Error`);
-        console.log(e);
+    if(msg.content.startsWith('=')){
+        adminCommands(msg)
+        rankedCommands(msg)
     }
-    
-    
 
-    
+      
 }
 
 function msgCheck(msg){
 
     if(msg.author.bot) return false;
     if(msg.channel.type == 'DM') return false;
-    if(!msg.content.startsWith('=') && !msg.content.startsWith('.')) {console.log('Failed check');return false;}
+    if(!msg.content.startsWith('=') && !msg.content.startsWith('.')) {return false;}
     return true;
 }
 
-async function PermCheck(msg, perm) {
-    const member = await msg.member
-    
-    if(member.permissions.has(perm)) return true;
-    return false    
-}
+
 /**
  * 
  * @param {dc.Message} msg 
