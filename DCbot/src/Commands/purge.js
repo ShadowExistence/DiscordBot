@@ -9,7 +9,8 @@ const ms = require('ms')
  */
 module.exports = async function (msg, args) {
     
-    if (msg.channel.type === 'DM') return;
+    if(msg.channel.type === 'DM') return;
+    
     if(args[0] > 100) {msg.reply('You can purge max. 100 messages!'); return;}
     const msgs = await msg.channel.messages.fetch({limit: (parseInt(args[0]))});
     
